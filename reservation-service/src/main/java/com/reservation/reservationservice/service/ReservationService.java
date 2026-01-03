@@ -80,6 +80,19 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
+    public List<RoomDTO> getAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        // 1. Get all physically available rooms
+        List<RoomDTO> allRooms = roomServiceClient.getAvailableRooms();
+
+        // 2. Get IDs of rooms that are busy during the requested slot
+        List<Long> busyRoomIds = reservationRepository.findBusyRoomIds(date, startTime, endTime);
+
+        // 3. Filter out busy rooms
+        return allRooms.stream()
+                .filter(room -> !busyRoomIds.contains(room.getId()))
+                .collect(Collectors.toList());
+    }
+
     public ReservationDTO cancelReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reservation not found"));

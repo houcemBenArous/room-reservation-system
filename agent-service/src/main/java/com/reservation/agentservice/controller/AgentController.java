@@ -8,7 +8,7 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
-import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 public class AgentController {
 
     private final ChatClient.Builder chatClientBuilder;
-    private final SyncMcpToolCallbackProvider mcpTools;
+
 
     // Mémoire conversationnelle
     private final ChatMemory chatMemory = MessageWindowChatMemory.builder()
@@ -38,19 +38,17 @@ public class AgentController {
                     
                     **Règles importantes :**
                     - Utilise TOUJOURS tes outils pour obtenir des informations réelles
-                    - Ne invente JAMAIS de données (salles, réservations, disponibilités)
-                    - Si une opération échoue, explique clairement pourquoi
-                    - Sois courtois et professionnel
-                    - Pour les dates, utilise le format YYYY-MM-DD
-                    - Pour les heures, utilise le format HH:mm (ex: 14:30)
+                    - **POUR LA DISPONIBILITÉ :** Si l'utilisateur demande "quelles salles sont disponibles ?" sans préciser d'heure, demande TOUJOURS : "Pour quelle date et quel créneau horaire ?"
+                    - Utilise l'outil `checkAvailability` pour vérifier la disponibilité réelle sur un créneau (ex: 10h-12h).
+                    - **POUR LE PLANNING :** Si l'utilisateur demande "quand la salle X est-elle réservée ?", utilise l'outil `getRoomSchedule`.
+                    - Ne invente JAMAIS de données.
+                    - Dates : YYYY-MM-DD
+                    - Heures : HH:mm
                     
                     **Exemples de requêtes :**
-                    - "Quelles salles sont disponibles ?"
-                    - "Réserve la salle A demain de 10h à 11h pour user"
-                    - "Montre mes réservations"
-                    - "Annule ma réservation numéro 1"
+                    - "Quelles salles sont disponibles demain de 14h à 16h ?" -> Utilise `checkAvailability`
+                    - "Quand la Salle A est-elle occupée ?" -> Utilise `getRoomSchedule`
                     """)
-                .defaultToolCallbacks(mcpTools)
                 .defaultAdvisors(
                         MessageChatMemoryAdvisor.builder(chatMemory)
                                 .build()

@@ -3,6 +3,7 @@ package com.reservation.reservationservice.tools;
 
 import com.reservation.reservationservice.dto.CreateReservationRequest;
 import com.reservation.reservationservice.dto.ReservationDTO;
+import com.reservation.reservationservice.dto.RoomDTO;
 import com.reservation.reservationservice.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 
@@ -77,5 +78,37 @@ public class ReservationMcpTools {
     )
     public List<ReservationDTO> listAllReservations() {
         return reservationService.getAllReservations();
+    }
+
+    @McpTool(
+            name = "checkAvailability",
+            description = "Verifie les salles disponibles pour une date et un creneau horaire specifique"
+    )
+    public List<RoomDTO> checkAvailability(
+            @McpToolParam(description = "Date au format YYYY-MM-DD", required = true) String date,
+            @McpToolParam(description = "Heure de debut au format HH:mm", required = true) String startTime,
+            @McpToolParam(description = "Heure de fin au format HH:mm", required = true) String endTime
+    ) {
+        return reservationService.getAvailableRooms(
+                LocalDate.parse(date),
+                LocalTime.parse(startTime),
+                LocalTime.parse(endTime)
+        );
+    }
+
+    @McpTool(
+            name = "getRoomSchedule",
+            description = "Recupere le planning des reservations pour une salle donnee (par son nom)"
+    )
+    public List<ReservationDTO> getRoomSchedule(
+            @McpToolParam(description = "Nom de la salle (ex: Salle A)", required = true) String roomName
+    ) {
+        // 1. Find the room ID by name (we need to inject RoomServiceClient in ReservationService, or just filter all reservations)
+        // Ideally we should use a proper service call. For now, let's filter all reservations as a quick win or add a method in service.
+        // Actually best practice: Add getReservationsByRoomName to Service.
+        // But for now, let's use the stream filter on returning list from Service if easy, OR better:
+        return reservationService.getAllReservations().stream()
+                .filter(r -> r.getRoomName().equalsIgnoreCase(roomName))
+                .toList();
     }
 }
