@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{geometry}
+\usepackage{float}
 
 \geometry{hmargin=2.5cm,vmargin=2.5cm}
 
@@ -37,7 +38,7 @@
 
 \lstset{style=mystyle}
 
-\title{\textbf{Rapport Technique}\\Système de Réservation de Salles Intelligent}
+\title{\textbf{Rapport Technique Détaillé}\\Système de Réservation de Salles Intelligent\\Basé sur Microservices et IA}
 \author{Houssem Eddine Ben Arous}
 \date{\today}
 
@@ -47,164 +48,363 @@
 \tableofcontents
 
 \chapter{Introduction}
-Ce rapport détaille la conception et l'implémentation d'un système de réservation de salles basé sur une architecture microservices. Le système intègre des fonctionnalités avancées telles qu'un agent conversationnel intelligent (Chatbot) utilisant le protocole MCP (Model Context Protocol) et une sécurité renforcée basée sur les rôles (RBAC) avec JWT.
+Ce document présente l'architecture, la conception et l'implémentation complète d'un système de réservation de salles intelligent.
 
-\section{Architecture Globale}
-Le système est composé des microservices suivants :
+\section{Objectif}
+Fournir une solution scalable et sécurisée permettant :
 \begin{itemize}
-    \item \textbf{API Gateway} : Point d'entrée unique, gère l'authentification et le routage.
-    \item \textbf{Discovery Service (Eureka)} : Permet l'enregistrement et la découverte dynamique des services.
-    \item \textbf{Auth Service} : Gère les utilisateurs et la génération des tokens JWT.
-    \item \textbf{Room Service} : Gestion des salles (CRUD, disponibilité).
-    \item \textbf{Reservation Service} : Gestion des réservations et validation des conflits.
-    \item \textbf{Agent Service} : Assistant IA intelligent pour interagir avec le système.
+    \item La gestion des salles et réservations via Microservices.
+    \item Une interaction naturelle via un Agent IA (Chatbot).
+    \item Une sécurité robuste (RBAC) centralisée et distribuée.
 \end{itemize}
 
-\chapter{Détails des Microservices}
+\chapter{Architecture Technique}
+L'application suit le pattern Microservices avec Spring Cloud.
+
+\section{Composants}
+\begin{itemize}
+    \item \textbf{Discovery Service} : Eureka Server.
+    \item \textbf{API Gateway} : Authentification JWT centralisée.
+    \item \textbf{Auth Service} : Gestion des utilisateurs et tokens.
+    \item \textbf{Room Service} : Gestion de l'inventaire.
+    \item \textbf{Reservation Service} : Gestion des plannings (Core).
+    \item \textbf{Agent Service} : Intelligence Artificielle (Ollama/Spring AI).
+\end{itemize}
+
+\chapter{Détails d'Implémentation}
+NB: Voir l'Annexe A pour le code source complet.
+
+\section{Sécurité (API Gateway \& RBAC)}
+La Gateway valide le JWT et transmet les rôles via headers HTTP (`X-User-Role`).
+Chaque microservice fait confiance à ces headers via une configuration de sécurité interne (`HeaderSecurityConfig`) et protège ses endpoints avec `@PreAuthorize`.
+
+\section{Logique de Réservation}
+La détection de conflits se fait au niveau de la base de données pour garantir l'intégrité des données même en cas d'accès concurrenciels.
+
+\section{Intelligence Artificielle (MCP)}
+L'agent utilise le protocole MCP pour appeler des outils Java (`checkAvailability`, `getRoomSchedule`) définis dans le backend, lui permettant de "voir" l'état réel du système.
+
+\chapter{Annexe A : Code Source Complet}
+Cette section contient le code source des composants critiques du système.
 
 \section{API Gateway}
-L'API Gateway sécurise l'accès aux services. Elle intercepte toutes les requêtes, vérifie le token JWT et transmet les informations de l'utilisateur (nom, rôle) via des en-têtes HTTP sécurisés.
 
-\subsection{Filtre d'Authentification (JwtAuthenticationFilter)}
-Ce filtre extrait le token, le valide et injecte les headers `X-User-Role` et `X-User-Username`.
+\subsection{JwtAuthenticationFilter.java}
+Filtre de sécurité central qui valide les tokens entrants.
+\begin{lstlisting}[language=Java]
+package com.reservation.apigateway.filter;
 
-\begin{lstlisting}[language=Java, caption=Extraction et Validation du Token]
-// Extrait de JwtAuthenticationFilter.java
-@Override
-public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-    ServerHttpRequest request = exchange.getRequest();
-    String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+import java.security.Key;
+import java.util.Base64;
 
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-        return onError(exchange, "Missing or invalid authorization header", HttpStatus.UNAUTHORIZED);
+@Component
+public class JwtAuthenticationFilter implements GatewayFilter {
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    private Key getSigningKey() {
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    String token = authHeader.substring(7);
-    // Validation du token et extraction des claims...
-    
-    ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
-            .header("X-User-Username", claims.getSubject())
-            .header("X-User-Role", claims.get("role", String.class))
-            .build();
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
-    return chain.filter(exchange.mutate().request(modifiedRequest).build());
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return onError(exchange, "Missing Authorization header", HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
+                    .header("X-User-Username", claims.getSubject())
+                    .header("X-User-Role", claims.get("role", String.class))
+                    .build();
+
+            return chain.filter(exchange.mutate().request(modifiedRequest).build());
+
+        } catch (Exception e) {
+            return onError(exchange, "Invalid Token", HttpStatus.UNAUTHORIZED);
+        }
+    }
+    
+    // onError method omitted for brevity
 }
 \end{lstlisting}
 
-\section{Service de Sécurité et RBAC}
-La sécurité est appliquée à deux niveaux : à la Gateway (vérification JWT global) et au niveau de chaque microservice (Autorisation fine via RBAC).
+\section{Auth Service}
 
-\subsection{Configuration de Sécurité (HeaderSecurityConfig)}
-Dans les services `room-service` et `reservation-service`, une configuration spécifique fait confiance aux headers envoyés par la Gateway.
+\subsection{AuthController.java}
+Contrôleur gérant la connexion.
+\begin{lstlisting}[language=Java]
+package com.reservation.authservice.controller;
 
-\begin{lstlisting}[language=Java, caption=Configuration de Sécurité Trust-Gateway]
-// Extrait de HeaderSecurityConfig.java
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity // Active @PreAuthorize
-public class HeaderSecurityConfig {
+import com.reservation.authservice.dto.LoginRequest;
+import com.reservation.authservice.dto.LoginResponse;
+import com.reservation.authservice.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    public static class HeaderAuthenticationFilter extends OncePerRequestFilter {
-        @Override
-        protected void doFilterInternal(HttpServletRequest request, ...) {
-            String role = request.getHeader("X-User-Role");
-            if (role != null) {
-                var authorities = List.of(new SimpleGrantedAuthority(role));
-                var auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            }
-            chain.doFilter(request, response);
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthController {
+
+    private final AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        try {
+            LoginResponse response = authService.login(request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
 \end{lstlisting}
 
-\subsection{Protection des Contrôleurs}
-Les contrôleurs utilisent l'annotation `@PreAuthorize` pour restreindre l'accès selon le rôle (ADMIN ou USER).
+\subsection{JwtService.java}
+Service utilitaire pour la génération et validation JWT.
+\begin{lstlisting}[language=Java]
+package com.reservation.authservice.service;
 
-\begin{lstlisting}[language=Java, caption=Protection des Endpoints RoomController]
-// Exemple dans RoomController.java
-@PostMapping
-@PreAuthorize("hasAuthority('ADMIN')") // Seul l'ADMIN peut créer
-public ResponseEntity<?> createRoom(@RequestBody RoomDTO roomDTO) {
-    return ResponseEntity.ok(roomService.createRoom(roomDTO));
-}
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import java.security.Key;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-@GetMapping
-@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')") // Tout le monde peut voir
-public ResponseEntity<List<RoomDTO>> getAllRooms() {
-    return ResponseEntity.ok(roomService.getAllRooms());
-}
-\end{lstlisting}
+@Service
+public class JwtService {
 
-\chapter{Gestion Avancée des Réservations}
+    @Value("${jwt.secret}")
+    private String secret;
+    @Value("${jwt.expiration}")
+    private Long expiration;
 
-\section{Vérification de Disponibilité Temporelle}
-Le système ne se contente pas de vérifier si une salle est "active", il vérifie les conflits d'horaires précis.
+    private Key getSigningKey() {
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
-\subsection{Logique Métier (ReservationService)}
-La méthode `getAvailableRooms` filtre les salles occupées sur un créneau donné.
-
-\begin{lstlisting}[language=Java, caption=Filtrage des Salles Disponibles]
-public List<RoomDTO> getAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
-    // 1. Récupérer toutes les salles physiques
-    List<RoomDTO> allRooms = roomServiceClient.getAvailableRooms();
-
-    // 2. Récupérer les ID des salles occupées pour ce créneau
-    List<Long> busyRoomIds = reservationRepository.findBusyRoomIds(date, startTime, endTime);
-
-    // 3. Filtrer
-    return allRooms.stream()
-            .filter(room -> !busyRoomIds.contains(room.getId()))
-            .collect(Collectors.toList());
-}
-\end{lstlisting}
-
-\subsection{Requête Repository Optimisée}
-Une requête JPQL personnalisée identifie les chevauchements de réservations.
-
-\begin{lstlisting}[language=Java, caption=Recherche de Conflits (Repository)]
-@Query("SELECT DISTINCT r.roomId FROM Reservation r " +
-        "WHERE r.date = :date " +
-        "AND r.status <> 'CANCELLED' " +
-        "AND ((r.startTime < :endTime AND r.endTime > :startTime))")
-List<Long> findBusyRoomIds(...);
-\end{lstlisting}
-
-\chapter{Agent Intelligent (Spring AI \& MCP)}
-L'Agent Service utilise Spring AI et le Model Context Protocol (MCP) pour permettre une interaction en langage naturel. Il dispose "d'outils" pour interagir avec la base de données.
-
-\section{Outils MCP (Tools)}
-L'agent utilise des outils pour effectuer des actions réelles. Nous avons implémenté des outils spécifiques pour la gestion du temps.
-
-\begin{lstlisting}[language=Java, caption=Outils MCP pour l'Agent]
-// Extrait de ReservationMcpTools.java
-
-@McpTool(name = "checkAvailability", description = "Vérifie les salles disponibles pour une date et un créneau")
-public List<RoomDTO> checkAvailability(String date, String startTime, String endTime) {
-    return reservationService.getAvailableRooms(...);
-}
-
-@McpTool(name = "getRoomSchedule", description = "Récupère le planning d'une salle par son nom")
-public List<ReservationDTO> getRoomSchedule(String roomName) {
-    // Logique de récupération par nom...
+    public String generateToken(String username, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
 }
 \end{lstlisting}
 
-\section{Prompt Système (System Prompt)}
-Le "cerveau" de l'agent est configuré avec des instructions strictes pour utiliser ces outils.
+\section{Room Service}
 
-\begin{lstlisting}[language=Java, caption=Configuration de l'Agent]
-.defaultSystem("""
-    Tu es un assistant intelligent pour la réservation...
-    Règles importantes :
-    - POUR LA DISPONIBILITÉ : Si l'utilisateur ne précise pas d'heure, demande TOUJOURS "Pour quelle date et créneau ?"
-    - Utilise l'outil `checkAvailability` pour les créneaux précis.
-    - Utilise `getRoomSchedule` pour voir le planning d'une salle.
-""")
+\subsection{RoomController.java}
+Contrôleur sécurisé par RBAC (@PreAuthorize).
+\begin{lstlisting}[language=Java]
+package com.reservation.roomservice.controller;
+
+import com.reservation.roomservice.dto.RoomDTO;
+import com.reservation.roomservice.service.RoomService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/rooms")
+@RequiredArgsConstructor
+public class RoomController {
+
+    private final RoomService roomService;
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        return ResponseEntity.ok(roomService.getAllRooms());
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> createRoom(@RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.createRoom(roomDTO));
+    }
+    
+    // Other methods...
+}
 \end{lstlisting}
 
-\chapter{Conclusion}
-Ce projet démontre une architecture robuste et sécurisée. L'utilisation combinée d'une Gateway pour l'authentification centralisée et de configurations de sécurité locales permet une gestion fine des droits (RBAC). L'intégration de l'IA via MCP transforme l'expérience utilisateur, passant d'une interface statique à une interaction conversationnelle capable de comprendre et traiter des contraintes temporelles complexes.
+\section{Reservation Service}
+
+\subsection{ReservationService.java}
+Logique métier incluant la vérification de disponibilité temporelle.
+\begin{lstlisting}[language=Java]
+package com.reservation.reservationservice.service;
+
+import com.reservation.reservationservice.dto.RoomDTO;
+import com.reservation.reservationservice.repository.ReservationRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ReservationService {
+
+    private final ReservationRepository reservationRepository;
+    private final RoomServiceClient roomServiceClient;
+
+    public List<RoomDTO> getAvailableRooms(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        // 1. Get all physically available rooms
+        List<RoomDTO> allRooms = roomServiceClient.getAvailableRooms();
+
+        // 2. Get IDs of rooms that are busy during the requested slot
+        List<Long> busyRoomIds = reservationRepository.findBusyRoomIds(date, startTime, endTime);
+
+        // 3. Filter out busy rooms
+        return allRooms.stream()
+                .filter(room -> !busyRoomIds.contains(room.getId()))
+                .collect(Collectors.toList());
+    }
+    
+    // createReservation method...
+}
+\end{lstlisting}
+
+\subsection{ReservationRepository.java}
+Requêtes JPQL pour la détection de conflits.
+\begin{lstlisting}[language=Java]
+package com.reservation.reservationservice.repository;
+
+import com.reservation.reservationservice.entity.Reservation;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+
+    @Query("SELECT DISTINCT r.roomId FROM Reservation r " +
+            "WHERE r.date = :date " +
+            "AND r.status <> 'CANCELLED' " +
+            "AND ((r.startTime < :endTime AND r.endTime > :startTime))")
+    List<Long> findBusyRoomIds(
+            @Param("date") LocalDate date,
+            @Param("startTime") LocalTime startTime,
+            @Param("endTime") LocalTime endTime
+    );
+}
+\end{lstlisting}
+
+\subsection{ReservationMcpTools.java}
+Outils exposés à l'Agent IA.
+\begin{lstlisting}[language=Java]
+package com.reservation.reservationservice.tools;
+
+import com.reservation.reservationservice.dto.ReservationDTO;
+import com.reservation.reservationservice.dto.RoomDTO;
+import com.reservation.reservationservice.service.ReservationService;
+import lombok.RequiredArgsConstructor;
+import org.springaicommunity.mcp.annotation.McpTool;
+import org.springaicommunity.mcp.annotation.McpToolParam;
+import org.springframework.stereotype.Component;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+public class ReservationMcpTools {
+
+    private final ReservationService reservationService;
+
+    @McpTool(name = "checkAvailability", description = "Verifie les salles disponibles")
+    public List<RoomDTO> checkAvailability(
+            @McpToolParam(name = "date") String date,
+            @McpToolParam(name = "startTime") String startTime,
+            @McpToolParam(name = "endTime") String endTime
+    ) {
+        return reservationService.getAvailableRooms(
+                LocalDate.parse(date),
+                LocalTime.parse(startTime),
+                LocalTime.parse(endTime)
+        );
+    }
+    
+    // Other tools...
+}
+\end{lstlisting}
+
+\section{Agent Service}
+
+\subsection{AgentController.java}
+Contrôleur de l'assistant IA avec Prompt Engineering.
+\begin{lstlisting}[language=Java]
+package com.reservation.agentservice.controller;
+
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/agent")
+@RequiredArgsConstructor
+public class AgentController {
+
+    private final ChatClient.Builder chatClientBuilder;
+
+    private ChatClient getChatClient() {
+        return chatClientBuilder
+                .defaultSystem("""
+                    Tu es un assistant intelligent pour la réservation de salles.
+                    Règles importantes :
+                    - POUR LA DISPONIBILITÉ : Demande TOUJOURS la date et l'heure.
+                    - Utilise `checkAvailability` pour vérification précise.
+                    """)
+                .build();
+    }
+    
+    // Chat endpoints...
+}
+\end{lstlisting}
 
 \end{document}

@@ -1,0 +1,229 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/C:/apache-maven/apache-maven-3.9.9/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/C:/apache-maven/apache-maven-3.9.9/lib/guava-33.2.1-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.reservation:reservation-service >-----------------
+[INFO] Building reservation-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ reservation-service ---
+[INFO] Deleting C:\Users\HOUCEM\Desktop\room-reservation-system\reservation-service\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ reservation-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ reservation-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 12 source files with javac [debug parameters release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/controller/ReservationController.java:[20,38] variable reservationService not initialized in the default constructor
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[26,61] cannot find symbol
+  symbol:   method getRoomId()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[28,34] cannot find symbol
+  symbol:   method getAvailable()
+  location: variable room of type com.reservation.reservationservice.dto.RoomDTO
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[34,24] cannot find symbol
+  symbol:   method getRoomId()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[35,24] cannot find symbol
+  symbol:   method getDate()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[36,24] cannot find symbol
+  symbol:   method getStartTime()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[37,24] cannot find symbol
+  symbol:   method getEndTime()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[46,40] cannot find symbol
+  symbol:   method getUsername()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[47,38] cannot find symbol
+  symbol:   method getRoomId()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[48,37] cannot find symbol
+  symbol:   method getName()
+  location: variable room of type com.reservation.reservationservice.dto.RoomDTO
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[49,36] cannot find symbol
+  symbol:   method getDate()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[50,41] cannot find symbol
+  symbol:   method getStartTime()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[51,39] cannot find symbol
+  symbol:   method getEndTime()
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[52,20] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[85,59] cannot find symbol
+  symbol:   method getId()
+  location: variable room of type com.reservation.reservationservice.dto.RoomDTO
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[93,20] cannot find symbol
+  symbol:   method setStatus(java.lang.String)
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[111,28] cannot find symbol
+  symbol:   method getStatus()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[110,28] cannot find symbol
+  symbol:   method getEndTime()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[109,28] cannot find symbol
+  symbol:   method getStartTime()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[108,28] cannot find symbol
+  symbol:   method getDate()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[107,28] cannot find symbol
+  symbol:   method getRoomName()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[106,28] cannot find symbol
+  symbol:   method getRoomId()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[105,28] cannot find symbol
+  symbol:   method getUsername()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[104,28] cannot find symbol
+  symbol:   method getId()
+  location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/feign/RoomServiceFallback.java:[17,16] constructor RoomDTO in class com.reservation.reservationservice.dto.RoomDTO cannot be applied to given types;
+  required: no arguments
+  found:    java.lang.Long,java.lang.String,int,boolean
+  reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[36,16] cannot find symbol
+  symbol:   method setUsername(java.lang.String)
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[37,16] cannot find symbol
+  symbol:   method setRoomId(java.lang.Long)
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[38,16] cannot find symbol
+  symbol:   method setDate(java.time.LocalDate)
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[39,16] cannot find symbol
+  symbol:   method setStartTime(java.time.LocalTime)
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[40,16] cannot find symbol
+  symbol:   method setEndTime(java.time.LocalTime)
+  location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[111,31] cannot find symbol
+  symbol:   method getRoomName()
+  location: variable r of type com.reservation.reservationservice.dto.ReservationDTO
+[INFO] 31 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.076 s
+[INFO] Finished at: 2026-01-06T22:07:22+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project reservation-service: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/controller/ReservationController.java:[20,38] variable reservationService not initialized in the default constructor
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[26,61] cannot find symbol
+[ERROR]   symbol:   method getRoomId()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[28,34] cannot find symbol
+[ERROR]   symbol:   method getAvailable()
+[ERROR]   location: variable room of type com.reservation.reservationservice.dto.RoomDTO
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[34,24] cannot find symbol
+[ERROR]   symbol:   method getRoomId()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[35,24] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[36,24] cannot find symbol
+[ERROR]   symbol:   method getStartTime()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[37,24] cannot find symbol
+[ERROR]   symbol:   method getEndTime()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[46,40] cannot find symbol
+[ERROR]   symbol:   method getUsername()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[47,38] cannot find symbol
+[ERROR]   symbol:   method getRoomId()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[48,37] cannot find symbol
+[ERROR]   symbol:   method getName()
+[ERROR]   location: variable room of type com.reservation.reservationservice.dto.RoomDTO
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[49,36] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[50,41] cannot find symbol
+[ERROR]   symbol:   method getStartTime()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[51,39] cannot find symbol
+[ERROR]   symbol:   method getEndTime()
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[52,20] cannot find symbol
+[ERROR]   symbol:   method setStatus(java.lang.String)
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[85,59] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable room of type com.reservation.reservationservice.dto.RoomDTO
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[93,20] cannot find symbol
+[ERROR]   symbol:   method setStatus(java.lang.String)
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[111,28] cannot find symbol
+[ERROR]   symbol:   method getStatus()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[110,28] cannot find symbol
+[ERROR]   symbol:   method getEndTime()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[109,28] cannot find symbol
+[ERROR]   symbol:   method getStartTime()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[108,28] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[107,28] cannot find symbol
+[ERROR]   symbol:   method getRoomName()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[106,28] cannot find symbol
+[ERROR]   symbol:   method getRoomId()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[105,28] cannot find symbol
+[ERROR]   symbol:   method getUsername()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/service/ReservationService.java:[104,28] cannot find symbol
+[ERROR]   symbol:   method getId()
+[ERROR]   location: variable reservation of type com.reservation.reservationservice.entity.Reservation
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/feign/RoomServiceFallback.java:[17,16] constructor RoomDTO in class com.reservation.reservationservice.dto.RoomDTO cannot be applied to given types;
+[ERROR]   required: no arguments
+[ERROR]   found:    java.lang.Long,java.lang.String,int,boolean
+[ERROR]   reason: actual and formal argument lists differ in length
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[36,16] cannot find symbol
+[ERROR]   symbol:   method setUsername(java.lang.String)
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[37,16] cannot find symbol
+[ERROR]   symbol:   method setRoomId(java.lang.Long)
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[38,16] cannot find symbol
+[ERROR]   symbol:   method setDate(java.time.LocalDate)
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[39,16] cannot find symbol
+[ERROR]   symbol:   method setStartTime(java.time.LocalTime)
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[40,16] cannot find symbol
+[ERROR]   symbol:   method setEndTime(java.time.LocalTime)
+[ERROR]   location: variable request of type com.reservation.reservationservice.dto.CreateReservationRequest
+[ERROR] /C:/Users/HOUCEM/Desktop/room-reservation-system/reservation-service/src/main/java/com/reservation/reservationservice/tools/ReservationMcpTools.java:[111,31] cannot find symbol
+[ERROR]   symbol:   method getRoomName()
+[ERROR]   location: variable r of type com.reservation.reservationservice.dto.ReservationDTO
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

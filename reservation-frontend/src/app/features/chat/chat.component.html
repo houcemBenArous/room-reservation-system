@@ -1,0 +1,94 @@
+<div class="flex-1 flex flex-col h-full overflow-hidden bg-white relative">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 p-4 flex justify-between items-center shadow-sm z-10">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+            <span class="h-2 w-2 bg-green-500 rounded-full mr-2"></span>
+            Assistant Virtuel
+        </h2>
+    </div>
+
+    <!-- Messages -->
+    <div #scrollContainer class="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50">
+
+        <!-- Welcome Message -->
+        <div class="flex justify-start">
+            <div class="flex max-w-2xl">
+                <div
+                    class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center border border-indigo-200">
+                    <span class="text-lg">🤖</span>
+                </div>
+                <div
+                    class="ml-3 bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800 prose prose-sm max-w-none">
+                    <p>Bonjour <strong>{{ authService.currentUser()?.username }}</strong> ! Je suis votre assistant
+                        de réservation.</p>
+                    <p>Je peux vous aider à :</p>
+                    <ul class="list-disc pl-4 mt-2 mb-2">
+                        <li>Vérifier la disponibilité des salles (ex: "Quelles salles sont libres ?")</li>
+                        <li>Réserver une salle (ex: "Je veux réserver la salle A demain")</li>
+                        <li>Consulter les plannings</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Iterate Messages -->
+        <div *ngFor="let msg of chatService.messages()" class="flex w-full"
+            [ngClass]="{'justify-end': msg.sender === 'user', 'justify-start': msg.sender === 'agent'}">
+
+            <!-- User Message -->
+            <div *ngIf="msg.sender === 'user'" class="flex max-w-2xl">
+                <div class="mr-3 bg-indigo-600 text-white p-4 rounded-2xl rounded-tr-none shadow-md">
+                    {{ msg.text }}
+                </div>
+                <div
+                    class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold border-2 border-white shadow-sm">
+                    {{ authService.currentUser()?.username?.charAt(0)?.toUpperCase() }}
+                </div>
+            </div>
+
+            <!-- Agent Message -->
+            <div *ngIf="msg.sender === 'agent'" class="flex max-w-2xl">
+                <div
+                    class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center border border-indigo-200">
+                    <span class="text-lg">🤖</span>
+                </div>
+                <div
+                    class="ml-3 bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800 overflow-hidden">
+                    <markdown [data]="msg.text" class="prose prose-sm prose-indigo max-w-none"></markdown>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div *ngIf="isLoading" class="flex justify-start">
+            <div
+                class="flex items-center space-x-2 ml-14 bg-white px-4 py-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
+                <div class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                <div class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Input Area -->
+    <div class="p-4 bg-white border-t border-gray-200 shadow-lg">
+        <div class="max-w-4xl mx-auto relative flex items-center">
+            <input [(ngModel)]="userMessage" (keyup.enter)="sendMessage()" type="text"
+                placeholder="Écrivez votre message ici..."
+                class="w-full pl-6 pr-14 py-4 rounded-full bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-inner text-gray-700 placeholder-gray-400"
+                [disabled]="isLoading">
+
+            <button (click)="sendMessage()" [disabled]="!userMessage.trim() || isLoading"
+                class="absolute right-2 p-2 bg-indigo-600 rounded-full text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg transform hover:scale-105">
+                <svg class="h-6 w-6 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </button>
+        </div>
+        <p class="text-center text-xs text-gray-400 mt-2">
+            L'IA peut faire des erreurs. Vérifiez les informations importantes.
+        </p>
+    </div>
+</div>

@@ -1,5 +1,7 @@
 package com.reservation.reservationservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +18,13 @@ public class ReservationDTO {
     private String username;
     private Long roomId;
     private String roomName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime startTime;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime endTime;
     private String status;
 }

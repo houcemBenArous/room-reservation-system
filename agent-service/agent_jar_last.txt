@@ -1,0 +1,100 @@
+﻿sun.misc.Unsafe has 
+been called
+Au caractère Ligne:1 
+: 1
++ java -jar target/age
+nt-service-0.0.1-SNAPS
+HOT.jar > 
+agent_jar_start.l ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (WARNING: A   
+  term...has been     
+called:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+WARNING: sun.misc.Unsa
+fe::allocateMemory 
+has been called by io.
+netty.util.internal.Pl
+atformDependent0$2 (ja
+r:nested:/C:/Users/HOU
+CEM/Desktop/room-reser
+vation-system/agent-se
+rvice/target/agent-ser
+vice-0.0.1-SNAPSHOT.ja
+r/!BOOT-INF/lib/netty-
+common-4.2.9.Final.jar
+!/)
+WARNING: Please 
+consider reporting 
+this to the 
+maintainers of class i
+o.netty.util.internal.
+PlatformDependent0$2
+WARNING: sun.misc.Unsa
+fe::allocateMemory 
+will be removed in a 
+future release
+2026-01-07T00:33:25.370+01:00  INFO 22272 --- [agent-service] [ient-1-Worker-0] i.m.client.LifecycleInitializer          : Server response with Protocol: 2025-06-18, Capabilities: ServerCapabilities[completions=CompletionCapabilities[], experimental=null, logging=LoggingCapabilities[], prompts=PromptCapabilities[listChanged=true], resources=ResourceCapabilities[subscribe=false, listChanged=true], tools=ToolCapabilities[listChanged=true]], Info: Implementation[name=mcp-server, title=null, version=1.0.0] and Instructions null
+2026-01-07T00:33:25.395+01:00  INFO 22272 --- [agent-service] [ient-2-Worker-2] i.m.client.LifecycleInitializer          : Server response with Protocol: 2025-06-18, Capabilities: ServerCapabilities[completions=CompletionCapabilities[], experimental=null, logging=LoggingCapabilities[], prompts=PromptCapabilities[listChanged=true], resources=ResourceCapabilities[subscribe=false, listChanged=true], tools=ToolCapabilities[listChanged=true]], Info: Implementation[name=mcp-server, title=null, version=1.0.0] and Instructions null
+2026-01-07T00:33:26.578+01:00  INFO 22272 --- [agent-service] [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-01-07T00:33:26.612+01:00  INFO 22272 --- [agent-service] [           main] o.s.c.openfeign.FeignClientFactoryBean   : For 'room-service' URL not provided. Will try picking an instance via load-balancing.
+2026-01-07T00:33:26.676+01:00  INFO 22272 --- [agent-service] [           main] o.s.c.openfeign.FeignClientFactoryBean   : For 'reservation-service' URL not provided. Will try picking an instance via load-balancing.
+2026-01-07T00:33:27.983+01:00  INFO 22272 --- [agent-service] [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-01-07T00:33:28.023+01:00  INFO 22272 --- [agent-service] [           main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestClient.
+2026-01-07T00:33:29.042+01:00  INFO 22272 --- [agent-service] [           main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2026-01-07T00:33:29.081+01:00  WARN 22272 --- [agent-service] [           main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-01-07T00:33:29.104+01:00  WARN 22272 --- [agent-service] [           main] o.s.m.p.s.SyncMcpSamplingProvider        : No sampling methods found
+2026-01-07T00:33:29.108+01:00  WARN 22272 --- [agent-service] [           main] o.s.m.p.e.SyncMcpElicitationProvider     : No elicitation methods found
+2026-01-07T00:33:29.129+01:00  INFO 22272 --- [agent-service] [           main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-01-07T00:33:29.159+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-01-07T00:33:29.161+01:00  INFO 22272 --- [agent-service] [           main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-01-07T00:33:29.171+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2026-01-07T00:33:29.171+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2026-01-07T00:33:29.171+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2026-01-07T00:33:29.173+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2026-01-07T00:33:29.173+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2026-01-07T00:33:29.173+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2026-01-07T00:33:29.173+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2026-01-07T00:33:29.325+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2026-01-07T00:33:29.328+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2026-01-07T00:33:29.329+01:00  INFO 22272 --- [agent-service] [           main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-01-07T00:33:29.330+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1767742409330 with initial instances count: 5
+2026-01-07T00:33:29.332+01:00  INFO 22272 --- [agent-service] [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application AGENT-SERVICE with eureka with status UP
+2026-01-07T00:33:29.333+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1767742409333, current=UP, previous=STARTING]
+2026-01-07T00:33:29.335+01:00  INFO 22272 --- [agent-service] [foReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AGENT-SERVICE/localhost:agent-service:8082: registering service...
+2026-01-07T00:33:29.341+01:00  INFO 22272 --- [agent-service] [           main] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application AGENT-SERVICE with eureka with status DOWN
+2026-01-07T00:33:29.341+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1767742409341, current=DOWN, previous=UP]
+2026-01-07T00:33:29.341+01:00  WARN 22272 --- [agent-service] [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-01-07T00:33:29.356+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2026-01-07T00:33:29.370+01:00  INFO 22272 --- [agent-service] [foReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AGENT-SERVICE/localhost:agent-service:8082 - registration status: 204
+2026-01-07T00:33:29.370+01:00  INFO 22272 --- [agent-service] [foReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AGENT-SERVICE/localhost:agent-service:8082: registering service...
+2026-01-07T00:33:29.375+01:00  INFO 22272 --- [agent-service] [foReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AGENT-SERVICE/localhost:agent-service:8082 - registration status: 204
+2026-01-07T00:33:29.376+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2026-01-07T00:33:29.381+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AGENT-SERVICE/localhost:agent-service:8082 - deregister  status: 200
+2026-01-07T00:33:29.381+01:00  INFO 22272 --- [agent-service] [           main] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2026-01-07T00:33:29.393+01:00  INFO 22272 --- [agent-service] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-01-07T00:33:29.404+01:00 ERROR 22272 --- [agent-service] [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8082 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8082 or configure this application to listen on another port.
+

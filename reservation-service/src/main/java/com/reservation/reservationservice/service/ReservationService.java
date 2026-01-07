@@ -1,17 +1,16 @@
 package com.reservation.reservationservice.service;
 
-
-
 import com.reservation.reservationservice.dto.CreateReservationRequest;
 import com.reservation.reservationservice.dto.ReservationDTO;
 import com.reservation.reservationservice.dto.RoomDTO;
 import com.reservation.reservationservice.entity.Reservation;
 import com.reservation.reservationservice.feign.RoomServiceClient;
 import com.reservation.reservationservice.repository.ReservationRepository;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,16 +21,15 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final RoomServiceClient roomServiceClient;
 
-    @CircuitBreaker(name = "roomService", fallbackMethod = "createReservationFallback")
     public ReservationDTO createReservation(CreateReservationRequest request) {
-        // 1. Vérifier que la salle existe via OpenFeign
+        // 1. Check room existence via OpenFeign
         RoomDTO room = roomServiceClient.getRoomById(request.getRoomId());
 
         if (room == null || !room.getAvailable()) {
             throw new RuntimeException("La salle n'est pas disponible");
         }
 
-        // 2. Vérifier les conflits d'horaires
+        // 2. Check for conflicts
         List<Reservation> conflicts = reservationRepository.findConflictingReservations(
                 request.getRoomId(),
                 request.getDate(),
@@ -43,7 +41,7 @@ public class ReservationService {
             throw new RuntimeException("La salle est déjà réservée pour cette plage horaire");
         }
 
-        // 3. Créer la réservation
+        // 3. Create reservation
         Reservation reservation = new Reservation();
         reservation.setUsername(request.getUsername());
         reservation.setRoomId(request.getRoomId());
@@ -55,11 +53,6 @@ public class ReservationService {
 
         Reservation saved = reservationRepository.save(reservation);
         return convertToDTO(saved);
-    }
-
-    // Fallback method pour le Circuit Breaker
-    public ReservationDTO createReservationFallback(CreateReservationRequest request, Exception ex) {
-        throw new RuntimeException("Le service des salles est temporairement indisponible. Veuillez réessayer plus tard.");
     }
 
     public List<ReservationDTO> getAllReservations() {

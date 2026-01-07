@@ -5,6 +5,9 @@ package com.reservation.reservationservice.feign;
 import com.reservation.reservationservice.dto.RoomDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 @Component
 public class RoomServiceFallback implements RoomServiceClient {
 
@@ -18,5 +21,11 @@ public class RoomServiceFallback implements RoomServiceClient {
     public Boolean checkAvailability(Long id) {
         // Fallback : considère la salle comme indisponible
         return false;
+    }
+
+    @Override
+    public List<RoomDTO> getAvailableRooms() {
+        // Fallback : retourne une liste vide
+        return Collections.emptyList();
     }
 }
